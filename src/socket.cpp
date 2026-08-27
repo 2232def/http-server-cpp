@@ -52,8 +52,13 @@ int main()
     }
     std::cout << "Client connected!\n";
 
-    // Send a welcome message to the connected client
-    const char* msg = "Hello from server!\n";
+    // Read the incoming HTTP request from the client
+    char buffer[1024] = {0};
+    recv(client_fd, buffer, sizeof(buffer) - 1, 0);
+    std::cout << "Request:\n" << buffer << "\n";
+
+    // Send an HTTP response back to the client
+    const char* msg = "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 13\r\n\r\nHello, World!";
     send(client_fd, msg, strlen(msg), 0);
 
     close(client_fd); // close the client connection
